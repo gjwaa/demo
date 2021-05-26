@@ -7,7 +7,7 @@
             <head>
                 <title>后台管理</title>
                 <link rel="stylesheet" href="${ctx}/css/admin.css">
-                <script src="${ctx}/js/jquery-2.1.4.js"></script>
+                <script src="${ctx}/js/jquery-3.6.0.js"></script>
                 <script>
                     $(function () {
                         $("#addProduct").click(function () {

@@ -140,5 +140,28 @@ public class UserDao implements InterUserDao {
         return false;
     }
 
+    @Override
+    public boolean checkIsRegis(String acc) {
+        Connection con = null;
+        PreparedStatement pstm = null;
+        ResultSet res = null;
+        try {
+            con = pool.getCon();
+            String sql = "select * from user where acc = ?";
+            pstm = con.prepareStatement(sql);
+            pstm.setString(1, acc);
+            res = pstm.executeQuery();
+            if (res.next()) {
+                return true;
+            } else
+                return false;
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        } finally {
+            pool.closeCon(res, pstm);
+        }
+        return false;
+    }
+
 
 }

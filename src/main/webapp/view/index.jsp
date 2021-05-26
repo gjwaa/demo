@@ -9,7 +9,7 @@
 <html>
 <head>
     <title>主页</title>
-    <script src="${ctx}/js/jquery-2.1.4.js"></script>
+    <script src="${ctx}/js/jquery-3.6.0.js"></script>
 
     <link href="${ctx}/css/index.css" rel="stylesheet">
 </head>

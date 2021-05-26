@@ -1,5 +1,8 @@
 package servlet;
 
+import dao.DaoFactroy;
+import dao.InterUserDao;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,16 +22,18 @@ public class Ajax extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doPost(req, resp);
+        req.setCharacterEncoding("utf-8");
+        resp.setContentType("text/html;charset=UTF-8");
+        InterUserDao iud = DaoFactroy.getUserDao();
         PrintWriter out = resp.getWriter();
-        String name = req.getParameter("name");
-        if(name.equals("admin")){
-            System.out.println("admin已存在");
-            out.write("123");
-            out.write("456");
-
-
+        String acc = req.getParameter("acc");
+        boolean isRegis = iud.checkIsRegis(acc);
+        if(isRegis){
+            System.out.println("该账号已被注册");
+            out.write("true");
         }else {
-            System.out.println("admin不存在");
+            System.out.println("该账号可使用");
+            out.write("false");
         }
     }
 }

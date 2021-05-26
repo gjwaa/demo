@@ -15,4 +15,6 @@ public interface InterUserDao {
     List<UserInfo> selectUserInfo();
 
     boolean adminLogin(String acc,String pwd);
+
+    boolean checkIsRegis(String acc);
 }

@@ -11,7 +11,7 @@
 <head>
     <c:set var="ctx" scope="application" value="${pageContext.request.contextPath}"/>
     <title>登录</title>
-    <script src="${ctx}/js/jquery-2.1.4.js"></script>
+    <script src="${ctx}/js/jquery-3.6.0.js"></script>
     <script>
         function changeImg() {
             $("#verifyImg").attr("src", "${ctx}/verify?" + Math.random());
