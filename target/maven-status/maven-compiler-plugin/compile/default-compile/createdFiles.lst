@@ -1,0 +1,11 @@
+servlet\Regis.class
+servlet\Admin.class
+servlet\AdminAdd.class
+servlet\Ajax.class
+servlet\Login.class
+servlet\verify.class
+dao\UserDao.class
+bean\UserInfo.class
+dao\DaoFactroy.class
+dao\InterUserDao.class
+util\ConnectionPool.class
