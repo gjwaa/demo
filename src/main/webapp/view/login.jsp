@@ -28,6 +28,12 @@
             }
         }
 
+        $(function (){
+            $("[name='acc']").blur(function (){
+
+            });
+        })
+
     </script>
 </head>
 
