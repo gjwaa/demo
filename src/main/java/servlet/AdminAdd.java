@@ -1,8 +1,9 @@
 package servlet;
 
 import bean.ProductInfo;
-import dao.DaoFactroy;
-import dao.InterProductDao;
+import dao.ProductMapper;
+import org.apache.ibatis.session.SqlSession;
+import util.MybatisUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,7 +26,8 @@ public class AdminAdd extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 //        super.doPost(req, resp);
-        InterProductDao ipd = DaoFactroy.getProductDao();
+        req.setCharacterEncoding("utf-8");
+        resp.setContentType("text/html;charset=UTF-8");
         String name = req.getParameter("name");
         String startPrice = req.getParameter("startPrice");
         String type = req.getParameter("type");
@@ -42,8 +44,17 @@ public class AdminAdd extends HttpServlet {
         productInfo.setProductTypeID(Integer.valueOf(type));
         productInfo.setProductImg(fileName);
         productInfo.setIntroduce(introduce);
-        ipd.addProduce(productInfo);
 
+        SqlSession sqlSession = MybatisUtil.getSqlSession();
+        ProductMapper mapper = sqlSession.getMapper(ProductMapper.class);
+        try {
+            mapper.addProduce(productInfo);
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlSession.commit();
+            sqlSession.close();
+        }
 
     }
 }

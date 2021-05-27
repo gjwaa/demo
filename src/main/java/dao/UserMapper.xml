@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.UserMapper">
+    <select id="selectUserInfo" resultType="bean.UserInfo">
+        select * from user
+    </select>
+    <select id="isLogin" resultType="bean.UserInfo" parameterType="bean.UserInfo">
+        select acc,pwd from user where acc=#{acc} and pwd=#{pwd}
+    </select>
+    <select id="checkRegis" resultType="bean.UserInfo" parameterType="String">
+        select acc from user where acc=#{acc}
+    </select>
+    <insert id="regis" parameterType="bean.UserInfo">
+        insert into user values (#{uid},#{acc},#{pwd},#{phone},#{email})
+    </insert>
+
+</mapper>

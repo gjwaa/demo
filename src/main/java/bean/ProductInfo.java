@@ -10,6 +10,20 @@ public class ProductInfo {
     private String strikePrice;
     private String newPrice;
 
+    public ProductInfo() {
+    }
+
+    public ProductInfo(String productName, int productTypeID, String productImg, String introduce, int stateID, String startPrice, String strikePrice, String newPrice) {
+        this.productName = productName;
+        this.productTypeID = productTypeID;
+        this.productImg = productImg;
+        this.introduce = introduce;
+        this.stateID = stateID;
+        this.startPrice = startPrice;
+        this.strikePrice = strikePrice;
+        this.newPrice = newPrice;
+    }
+
     public String getProductName() {
         return productName;
     }
@@ -72,5 +86,19 @@ public class ProductInfo {
 
     public void setNewPrice(String newPrice) {
         this.newPrice = newPrice;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductInfo{" +
+                "productName='" + productName + '\'' +
+                ", productTypeID=" + productTypeID +
+                ", productImg='" + productImg + '\'' +
+                ", introduce='" + introduce + '\'' +
+                ", stateID=" + stateID +
+                ", startPrice='" + startPrice + '\'' +
+                ", strikePrice='" + strikePrice + '\'' +
+                ", newPrice='" + newPrice + '\'' +
+                '}';
     }
 }

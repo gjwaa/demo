@@ -1,7 +1,9 @@
 package servlet;
 
-import dao.DaoFactroy;
-import dao.InterUserDao;
+import bean.UserInfo;
+import dao.UserMapper;
+import org.apache.ibatis.session.SqlSession;
+import util.MybatisUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -24,16 +26,25 @@ public class Ajax extends HttpServlet {
 //        super.doPost(req, resp);
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=UTF-8");
-        InterUserDao iud = DaoFactroy.getUserDao();
+        SqlSession sqlSession = MybatisUtil.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
         PrintWriter out = resp.getWriter();
         String acc = req.getParameter("acc");
-        boolean isRegis = iud.checkIsRegis(acc);
-        if(isRegis){
-            System.out.println("该账号已被注册");
-            out.write("true");
-        }else {
-            System.out.println("该账号可使用");
-            out.write("false");
+        try {
+            UserInfo userInfo = mapper.checkRegis(acc);
+            if (userInfo==null){
+                System.out.println("该账号可使用");
+                out.write("false");
+            }else {
+                System.out.println("该账号已被注册");
+                out.write("true");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlSession.close();
         }
+
     }
 }

@@ -1,8 +1,9 @@
 package servlet;
 
 import bean.UserInfo;
-import dao.DaoFactroy;
-import dao.InterUserDao;
+import dao.UserMapper;
+import org.apache.ibatis.session.SqlSession;
+import util.MybatisUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -14,7 +15,6 @@ import java.util.List;
 
 @WebServlet(value = "/login")
 public class Login extends HttpServlet {
-    private InterUserDao iud = DaoFactroy.getUserDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,22 +31,36 @@ public class Login extends HttpServlet {
         String pwd = req.getParameter("pwd");
         String verify = req.getParameter("verify");
         System.out.println(acc + ",,," + pwd);
-        List<UserInfo> list = iud.selectUserInfo();
-        req.getSession().setAttribute("userList", list);
-        String serverVerify = (String) req.getSession().getAttribute("verify");
-        if (verify.equals(serverVerify)) {
-            System.out.println("验证码正确");
-            boolean login = iud.isLogin(acc, pwd);
-            if (login) {
-                System.out.println("登陆成功");
-                req.getRequestDispatcher("view/table.jsp").forward(req, resp);
-            } else {
-                System.out.println("登录失败");
-                resp.sendRedirect("view/login.jsp?login=false");
 
+        SqlSession sqlSession = MybatisUtil.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+
+        try {
+            List<UserInfo> list = mapper.selectUserInfo();
+            req.getSession().setAttribute("userList", list);
+            String serverVerify = (String) req.getSession().getAttribute("verify");
+            if (verify.equals(serverVerify)) {
+                System.out.println("验证码正确");
+                UserInfo login = mapper.isLogin(new UserInfo(acc, pwd));
+                if (login!=null){
+                    if (acc.equals(login.getAcc())&&pwd.equals(login.getPwd())) {
+                        System.out.println("登陆成功");
+                        req.getRequestDispatcher("view/table.jsp").forward(req, resp);
+                    } else {
+                        System.out.println("账号密码错误");
+                        resp.sendRedirect("view/login.jsp?login=false");
+                    }
+                }else {
+                    resp.sendRedirect("view/login.jsp?login=false");
+                }
+
+            } else {
+                resp.sendRedirect("view/login.jsp?login=false");
             }
-        } else {
-            resp.sendRedirect("view/login.jsp?login=false");
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlSession.close();
         }
 
     }

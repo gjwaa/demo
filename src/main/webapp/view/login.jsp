@@ -1,5 +1,4 @@
-<%@ page import="dao.InterUserDao" %>
-<%@ page import="dao.DaoFactroy" %>
+<%@ page import="dao.UserMapper" %>
 <%@ page import="java.util.List" %>
 <%@ page import="bean.UserInfo" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>

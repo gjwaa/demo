@@ -1,8 +1,9 @@
 package servlet;
 
 import bean.UserInfo;
-import dao.DaoFactroy;
-import dao.InterUserDao;
+import dao.UserMapper;
+import org.apache.ibatis.session.SqlSession;
+import util.MybatisUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +14,6 @@ import java.io.IOException;
 
 @WebServlet("/regis")
 public class Regis extends HttpServlet {
-    private InterUserDao iud = DaoFactroy.getUserDao();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,23 +31,28 @@ public class Regis extends HttpServlet {
         String phone = req.getParameter("phone");
         String email = req.getParameter("email");
 
-        boolean checkRegis = iud.checkRegis(acc);
-        if (!checkRegis) {
-            UserInfo userInfo = new UserInfo();
-            userInfo.setAcc(acc);
-            userInfo.setPwd(pwd);
-            userInfo.setPhone(phone);
-            userInfo.setEmail(email);
-            boolean regis = iud.regis(userInfo);
-            if (regis) {
+        SqlSession sqlSession = MybatisUtil.getSqlSession();
+        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+        try {
+            UserInfo checkRegis = mapper.checkRegis(acc);
+            System.out.println(checkRegis + "=====");
+            if (checkRegis == null) {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setAcc(acc);
+                userInfo.setPwd(pwd);
+                userInfo.setPhone(phone);
+                userInfo.setEmail(email);
+                mapper.regis(userInfo);
                 req.getRequestDispatcher("view/login.jsp").forward(req, resp);
             } else {
                 resp.sendRedirect("view/regis.jsp?error=yes");
             }
-        } else {
-            resp.sendRedirect("view/regis.jsp?error=yes");
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            sqlSession.commit();
+            sqlSession.close();
         }
-
 
     }
 }

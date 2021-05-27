@@ -1,5 +1,4 @@
-<%@ page import="dao.InterUserDao" %>
-<%@ page import="dao.DaoFactroy" %>
+<%@ page import="dao.UserMapper" %>
 <%@ page import="bean.UserInfo" %>
 <%@ page import="java.util.List" %><%--
   Created by IntelliJ IDEA.
