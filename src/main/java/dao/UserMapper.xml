@@ -16,4 +16,5 @@
         insert into user values (#{uid},#{acc},#{pwd},#{phone},#{email})
     </insert>
 
+
 </mapper>
