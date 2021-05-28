@@ -5,6 +5,7 @@ import org.apache.ibatis.session.SqlSession;
 import util.MybatisUtil;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserDao implements UserMapper{
     @Override
@@ -42,6 +43,11 @@ public class UserDao implements UserMapper{
         List<UserInfo> userInfos = mapper.selectUserInfo();
         sqlSession.close();
         return userInfos;
+    }
+
+    @Override
+    public List<UserInfo> getUserByLimit(Map<String,Integer> map) {
+        return null;
     }
 
 

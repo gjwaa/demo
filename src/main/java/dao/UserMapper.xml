@@ -15,6 +15,9 @@
     <insert id="regis" parameterType="bean.UserInfo">
         insert into user values (#{uid},#{acc},#{pwd},#{phone},#{email})
     </insert>
+    <select id="getUserByLimit" resultType="bean.UserInfo" parameterType="map">
+        select * from user limit #{startIndex},#{pageSize}
+    </select>
 
 
 </mapper>
