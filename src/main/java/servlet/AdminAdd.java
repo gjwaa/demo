@@ -1,6 +1,7 @@
 package servlet;
 
 import bean.ProductInfo;
+import dao.ProductDao;
 import dao.ProductMapper;
 import org.apache.ibatis.session.SqlSession;
 import util.MybatisUtil;
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.IOException;
 
-@WebServlet(name = "AdminAdd",urlPatterns = "/adminAdd")
+@WebServlet(name = "AdminAdd", urlPatterns = "/adminAdd")
 @MultipartConfig(location = "D://")
 public class AdminAdd extends HttpServlet {
     @Override
@@ -35,8 +36,8 @@ public class AdminAdd extends HttpServlet {
 
         Part loadFile = req.getPart("loadFile");
         String fileName = loadFile.getSubmittedFileName();
-        loadFile.write("D://load//"+fileName);
-        System.out.println("loadFile:"+fileName);
+        loadFile.write("D://load//" + fileName);
+        System.out.println("loadFile:" + fileName);
 
         ProductInfo productInfo = new ProductInfo();
         productInfo.setProductName(name);
@@ -45,16 +46,9 @@ public class AdminAdd extends HttpServlet {
         productInfo.setProductImg(fileName);
         productInfo.setIntroduce(introduce);
 
-        SqlSession sqlSession = MybatisUtil.getSqlSession();
-        ProductMapper mapper = sqlSession.getMapper(ProductMapper.class);
-        try {
-            mapper.addProduce(productInfo);
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            sqlSession.commit();
-            sqlSession.close();
-        }
+        ProductDao productDao = new ProductDao();
+        productDao.addProduce(productInfo);
+
 
     }
 }

@@ -68,7 +68,7 @@
         <div style="width: 100% ; height: auto; background-color: rgb(99, 117, 199) ;"><span style="color: #fff;">会员注册&gt;&gt;&gt;</span>
         </div>
         <div class="content-form">
-            <form action="${ctx}/regis" method="post" onsubmit="return checkFrom()">
+            <form action="${ctx}/opt?action=regis" method="post" onsubmit="return checkFrom()">
                 <span>用户：</span><input name="acc" type="text" style="width: 100px;"><span id="accTip"></span><br><br>
                 <span>密码：</span><input name="pwd" type="password" style="width: 100px;"><br><br>
                 <span>确认密码：</span><input name="rePwd" type="password" style="width: 100px;"><br><br>

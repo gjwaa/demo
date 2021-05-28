@@ -33,7 +33,7 @@
 </head>
 
 <body>
-<form action="${ctx}/login" method="post" onsubmit="return checkFrom()">
+<form action="${ctx}/opt?action=login" method="post" onsubmit="return checkFrom()">
     <input type="text" name="acc"><br>
     <input type="text" name="pwd"><br>
     <input type="text" name="verify">

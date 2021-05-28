@@ -1,6 +1,7 @@
 package servlet;
 
 import bean.AdminInfo;
+import dao.AdminDao;
 import dao.AdminMapper;
 import org.apache.ibatis.session.SqlSession;
 import util.MybatisUtil;
@@ -33,35 +34,30 @@ public class Admin extends HttpServlet {
         System.out.println("");
         String adminVerify = (String) req.getSession().getAttribute("adminVerify");
 
-        SqlSession sqlSession = MybatisUtil.getSqlSession();
-        AdminMapper mapper = sqlSession.getMapper(AdminMapper.class);
-        try {
-            if (verify.equals(adminVerify)) {
-                System.out.println("验证码正确");
+        AdminDao adminDao = new AdminDao();
 
-                AdminInfo login = mapper.adminLogin(new AdminInfo(acc,pwd));
-                System.out.println(login+"++++++");
-                if (login!=null){
-                    if (acc.equals(login.getAcc())&&pwd.equals(login.getPwd())) {
-                        System.out.println("登陆成功");
-                        req.getRequestDispatcher("view/adminManage.jsp").forward(req, resp);
-                    } else {
-                        System.out.println("登录失败");
-                        resp.sendRedirect("view/admin.jsp?admin=false");
+        if (verify.equals(adminVerify)) {
+            System.out.println("验证码正确");
 
-                    }
-                }else {
+            AdminInfo login = adminDao.adminLogin(new AdminInfo(acc, pwd));
+            System.out.println(login + "++++++");
+            if (login != null) {
+                if (acc.equals(login.getAcc()) && pwd.equals(login.getPwd())) {
+                    System.out.println("登陆成功");
+                    req.getRequestDispatcher("view/adminManage.jsp").forward(req, resp);
+                } else {
+                    System.out.println("登录失败");
                     resp.sendRedirect("view/admin.jsp?admin=false");
-                }
 
+                }
             } else {
                 resp.sendRedirect("view/admin.jsp?admin=false");
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            sqlSession.close();
+
+        } else {
+            resp.sendRedirect("view/admin.jsp?admin=false");
         }
+
 
     }
 }

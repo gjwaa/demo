@@ -1,6 +1,7 @@
 package servlet;
 
 import bean.UserInfo;
+import dao.UserDao;
 import dao.UserMapper;
 import org.apache.ibatis.session.SqlSession;
 import util.MybatisUtil;
@@ -13,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-@WebServlet(value = "/login")
+@WebServlet(value = "/opt")
 public class Login extends HttpServlet {
 
     @Override
@@ -27,41 +28,60 @@ public class Login extends HttpServlet {
 //        super.doPost(req, resp);
         req.setCharacterEncoding("utf-8");
         resp.setContentType("text/html;charset=UTF-8");
-        String acc = req.getParameter("acc");
-        String pwd = req.getParameter("pwd");
-        String verify = req.getParameter("verify");
-        System.out.println(acc + ",,," + pwd);
+        UserDao userDao = new UserDao();
+        String actionType = req.getParameter("action");
+        if (actionType.equals("login")) {
+            String acc = req.getParameter("acc");
+            String pwd = req.getParameter("pwd");
+            String verify = req.getParameter("verify");
+            System.out.println(acc + ",,," + pwd);
 
-        SqlSession sqlSession = MybatisUtil.getSqlSession();
-        UserMapper mapper = sqlSession.getMapper(UserMapper.class);
 
-        try {
-            List<UserInfo> list = mapper.selectUserInfo();
+            List<UserInfo> list = userDao.selectUserInfo();
             req.getSession().setAttribute("userList", list);
             String serverVerify = (String) req.getSession().getAttribute("verify");
             if (verify.equals(serverVerify)) {
                 System.out.println("验证码正确");
-                UserInfo login = mapper.isLogin(new UserInfo(acc, pwd));
-                if (login!=null){
-                    if (acc.equals(login.getAcc())&&pwd.equals(login.getPwd())) {
+                UserInfo login = userDao.isLogin(new UserInfo(acc, pwd));
+                if (login != null) {
+                    if (acc.equals(login.getAcc()) && pwd.equals(login.getPwd())) {
                         System.out.println("登陆成功");
                         req.getRequestDispatcher("view/table.jsp").forward(req, resp);
                     } else {
                         System.out.println("账号密码错误");
                         resp.sendRedirect("view/login.jsp?login=false");
                     }
-                }else {
+                } else {
                     resp.sendRedirect("view/login.jsp?login=false");
                 }
 
             } else {
                 resp.sendRedirect("view/login.jsp?login=false");
             }
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            sqlSession.close();
+
+        } else if (actionType.equals("regis")) {
+            String acc = req.getParameter("acc");
+            String pwd = req.getParameter("pwd");
+            String phone = req.getParameter("phone");
+            String email = req.getParameter("email");
+
+
+            UserInfo checkRegis = userDao.checkRegis(acc);
+            System.out.println(checkRegis + "=====");
+            if (checkRegis == null) {
+                UserInfo userInfo = new UserInfo();
+                userInfo.setAcc(acc);
+                userInfo.setPwd(pwd);
+                userInfo.setPhone(phone);
+                userInfo.setEmail(email);
+                userDao.regis(userInfo);
+                req.getRequestDispatcher("view/login.jsp").forward(req, resp);
+            } else {
+                resp.sendRedirect("view/regis.jsp?error=yes");
+            }
+
         }
+
 
     }
 
