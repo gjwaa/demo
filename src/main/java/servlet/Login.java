@@ -38,6 +38,7 @@ public class Login extends HttpServlet {
 
 
             List<UserInfo> list = userDao.selectUserInfo();
+            System.out.println("--->"+list.size());
             req.getSession().setAttribute("userList", list);
             String serverVerify = (String) req.getSession().getAttribute("verify");
             if (verify.equals(serverVerify)) {

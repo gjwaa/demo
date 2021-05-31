@@ -1,6 +1,7 @@
 package dao;
 
 import bean.UserInfo;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -16,6 +17,7 @@ public interface UserMapper {
 
 
     List<UserInfo> selectUserInfo();
+
 
     List<UserInfo> getUserByLimit(Map<String,Integer> map);
 

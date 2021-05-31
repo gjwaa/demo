@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="dao.TeacherMapper">
+
+    <select id="getTeacherById" resultMap="tsVo">
+        select s.sid, s.sname, t.tid, t.tname
+        from student s,
+             teacher t
+        where s.tid = t.tid
+          and t.tid = #{tid}
+    </select>
+    <resultMap id="tsVo" type="bean.Teacher">
+        <id column="tid" property="tid"/>
+        <result column="tname" property="tname"/>
+        <collection property="students" ofType="bean.Student">
+            <result column="sid" property="sid"/>
+            <result column="sname" property="sname"/>
+            <result column="tid" property="tid"/>
+        </collection>
+    </resultMap>
+
+</mapper>
